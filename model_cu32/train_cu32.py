@@ -123,7 +123,7 @@ class ImageSet(data.Dataset):
         img_data = self.transforms(cropped_img)
         cropped_img.close()
         label = from_ctufile(load_type,video_number,frame_number,str(ctu_number),layer2)
-        return img_data,label
+        return img_data,label,layer2
 
     def __len__(self):
         return len(self.img_files)
@@ -158,7 +158,7 @@ valid_loss_min = np.Inf
 # ==================== train, validation and test =======================
 def train(model, device, train_loader, optimizer, epoch):
     model.train()
-    for batch_idx, (img_data, target) in enumerate(train_loader):
+    for batch_idx, (img_data, target,layer2) in enumerate(train_loader):
         img_data, target = img_data.to(device), target.to(device)
         data_v = Variable(img_data)
         target_v = Variable(target)
@@ -192,7 +192,7 @@ def validation(model, device, validation_loader,epoch):
     validation_loss = 0
     correct = 0
     with torch.no_grad():
-        for img_data, target in validation_loader:
+        for img_data, target ,layer2 in validation_loader:
             img_data, target = img_data.to(device), target.to(device)
             output = model(img_data)
             validation_loss += criterion(output[:,0:4], target[:,0]).item()+criterion(output[:,4:8], target[:,1]).item()+criterion(output[:,8:12], target[:,2]).item()+criterion(output[:,12:16], target[:,3]).item() # 将一批的损失相加
@@ -232,7 +232,7 @@ def test(model, device, test_loader):
     for i in range(16):
         label.append(str(i))
     with torch.no_grad():
-        for img_data, target,layer2 in test_loader:
+        for img_data, target, layer2 in test_loader:
             img_data, target = img_data.to(device), target.to(device)
             output = model(img_data)
             validation_loss += criterion(output[:,0:4], target[:,0]).item()+criterion(output[:,4:8], target[:,1]).item()+criterion(output[:,8:12], target[:,2]).item()+criterion(output[:,12:16], target[:,3]).item() # 将一批的损失相加
