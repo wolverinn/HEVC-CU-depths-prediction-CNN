@@ -32,9 +32,9 @@ We generate our own dataset from YUV test sequences, refer to:
 We use Cross Entropy Loss as loss function. For the four output labels, we calculate the Cross Entropy Loss seperately and then add them together.
 
 ## Validation
-The **loss** of our trained model is: 
+The **loss** of our trained model is: 3.1161
 
-The **accuracy** of each label predicted is: 
+The **accuracy** of each label predicted is: 65.29%
 
 The best way to evaluate the model is to integrate the model into the HEVC encoder. I've conceived a pipeline:
 
