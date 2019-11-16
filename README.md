@@ -34,7 +34,21 @@ We generate our own dataset from YUV test sequences, refer to:
 We use Cross Entropy Loss as loss function. For the four output labels, we calculate the Cross Entropy Loss seperately and then add them together.
 
 ## Validation
-The loss of our trained model is: 
+The **loss** of our trained model is: 
 
-The accuracy of each label predicted is: 
+The **accuracy** of each label predicted is: 
 
+The best way to evaluate the model is to integrate the model into the HEVC encoder. I've conceived a pipeline:
+
+1. When HEVC encoder starts to process a new frame with frame number FrameNumber, it calls a command: ```python use_model.py -f FrameNumber```
+2. The script ```use_model.py``` takes FrameNumber as input. It also reads the ```bitstream.cfg``` to get the YUV filename the HEVC is currently processing. If FrameNumber is 0, it first use FFmpeg to extract frames from the YUV file. Then, it processes certain frame, and for all the CTUs in this frame, it generates a ```CtuNumber.txt``` with a 16x16 matrix in it and store all the txt in a folder ```ctu```.
+3. When HEVC encoder starts to process the CTU numbered CtuNumber, it goes to the ```ctu``` folder, find ```CtuNumber.txt``` and read the depths. In ```xCompressCU()```, if it's not at the predicted depth, then skip ```xCheckRDCostIntra()``` function.
+
+I've already realized ```use_model.py```. Find it in ```./model test pipeline```.
+
+Using this evaluating pipeline, we can compare the encoding time and BDBR at the same time.
+
+I use a simpler approach to evaluate the increase in RD-cost for each YUV file. As ```xCompressCU()``` in HEVC encoder calculates the RD-cost exhaustively at each depth, we can get the RD-cost for every possible depth decision. Thus, we can realize comparison of RD-cost between the original encoder and the CNN model. See the ```model test pipeline``` folder for codes.
+
+## To be continued...
+Since we already know 1 label comes from a 16x16 CU, so we can simply predict 1 label at a time. The input can be a combination of 64x64, 32x32 and 16x16 CUs. I'm guessing this will achieve a smaller loss and higher accuracy... Also, I'd like to try some pre-trained models like ResNet, hopefully it will produce better results...
