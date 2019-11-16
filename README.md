@@ -8,7 +8,11 @@ For a 64x64 CTU, the HEVC encoder predicts a 16x16 matrix to represent its depth
 
 Directly predict 16 labels at one time is difficult for a neural network, so there're other ways to design the model. A 64x64 CTU corresponds to 16 labels. And if we divide it into four 32x32 CUs, then each 32x32 CU corresponds to only four labels, which makes the task easier.
 
-The depths are 0, 1, 2 or 3. Depth 0 indicates that the 64x64 CU will be encoded as it is. Depth 1 indicates that the 64x64 CU will be further split into four 32x32 CUs and then be encoded, etc.
+The depths are 0, 1, 2 or 3. Depth 0 indicates that the 64x64 CU will be encoded as it is. Depth 1 indicates that the 64x64 CU will be further split into four 32x32 CUs and then be encoded, etc. Here's an example of a 64x64 CU and its depth decision:
+
+![64CU](_v_images/20191116110752638_8757.png =425x)
+
+![](_v_images/20191116110808920_18707.png =425x)
 
 For more information on a CNN approach to predict the CU depths for a 64x64 CTU, you can refer to these documents:
 
@@ -20,6 +24,8 @@ Like mentioned above, we can directly use a 32x32 CU as input, and ouput 4 label
 
 So our model use both the 64x64 CU and the current 32x32 CU as input, and ouputs 4 labels indicating depths. Here's our architecture:
 
+![cnn_model](_v_images/20191116195804171_10635.png)
+
 ## Dataset & Loss Function
 We generate our own dataset from YUV test sequences, refer to:
 
@@ -28,3 +34,7 @@ We generate our own dataset from YUV test sequences, refer to:
 We use Cross Entropy Loss as loss function. For the four output labels, we calculate the Cross Entropy Loss seperately and then add them together.
 
 ## Validation
+The loss of our trained model is: 
+
+The accuracy of each label predicted is: 
+
