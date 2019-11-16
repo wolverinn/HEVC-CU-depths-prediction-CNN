@@ -10,9 +10,9 @@ Directly predict 16 labels at one time is difficult for a neural network, so the
 
 The depths are 0, 1, 2 or 3. Depth 0 indicates that the 64x64 CU will be encoded as it is. Depth 1 indicates that the 64x64 CU will be further split into four 32x32 CUs and then be encoded, etc. Here's an example of a 64x64 CU and its depth decision:
 
-![64CU](_v_images/20191116110752638_8757.png =425x)
+![64CU](_v_images/20191116110752638_8757.png)
 
-![](_v_images/20191116110808920_18707.png =425x)
+![CU depths](_v_images/20191116110808920_18707.png)
 
 For more information on a CNN approach to predict the CU depths for a 64x64 CTU, you can refer to these documents:
 
