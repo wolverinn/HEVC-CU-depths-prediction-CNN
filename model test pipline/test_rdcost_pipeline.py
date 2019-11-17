@@ -122,12 +122,21 @@ def get_ctu_cost(cost_dict,label_list): # cost_dict = depth_cost[frame_num][ctu_
         return cost_dict["0"]
     for i,depth in enumerate(label_list):
         if depth == 1:
-            ctu_cost += cost_dict["1"][label_index[i][0]]/4
+            try:
+                ctu_cost += cost_dict["1"][label_index[i][0]]/4
+            except:
+                pass
         elif depth == 2:
-            ctu_cost += cost_dict["2"][label_index[i][1]]
+            try:
+                ctu_cost += cost_dict["2"][label_index[i][1]]
+            except:
+                pass
         else:
-            temp_depth3_cost = cost_dict["3"][label_index[i][1]*8:(label_index[i][1]*8+8)]
-            ctu_cost += np.min(temp_depth3_cost[0:2])+np.min(temp_depth3_cost[2:4])+np.min(temp_depth3_cost[4:6])+np.min(temp_depth3_cost[6:8])
+            try:
+                temp_depth3_cost = cost_dict["3"][label_index[i][1]*8:(label_index[i][1]*8+8)]
+                ctu_cost += np.min(temp_depth3_cost[0:2])+np.min(temp_depth3_cost[2:4])+np.min(temp_depth3_cost[4:6])+np.min(temp_depth3_cost[6:8])
+            except:
+                pass
     return ctu_cost
 
 YUV_FILE_PATH = ".\\test_cost"
@@ -269,4 +278,4 @@ for i,yuv_filename in enumerate(os.listdir(YUV_FILE_PATH)):
             pred_cost += temp_pred_cost
     print("HEVC encoder RD-cost: {}".format(ori_cost))
     print("CNN model RD-cost: {}".format(pred_cost))
-    print("cost difference: {}%".format(str((pred_cost-ori_cost)/ori_cost)))
+    print("cost difference: {}%".format(str((pred_cost-ori_cost)/ori_cost/100)))
