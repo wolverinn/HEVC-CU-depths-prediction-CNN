@@ -32,9 +32,9 @@ We generate our own dataset from YUV test sequences, refer to:
 We use Cross Entropy Loss as loss function. For the four output labels, we calculate the Cross Entropy Loss seperately and then add them together.
 
 ## Validation
-The **loss** of our trained model is: 3.1049
+The **loss** of our trained model on test set is: 3.1049
 
-The **accuracy** of each label predicted is: 66.12%
+The **accuracy** of each label predicted on test set is: 66.12%
 
 The best way to evaluate the model is to integrate the model into the HEVC encoder. I've conceived a pipeline:
 
@@ -48,7 +48,7 @@ Using this evaluating pipeline, we can compare the encoding time and BDBR at the
 
 I use a simpler approach to evaluate the increase in RD-cost for each YUV file. As ```xCompressCU()``` in HEVC encoder calculates the RD-cost exhaustively at each depth, we can get the RD-cost for every possible depth decision. Thus, we can realize comparison of RD-cost between the original encoder and the CNN model. See the ```model test pipeline``` folder for codes.
 
-The increase in **RD cost** of our model is: 2.1%
+The increase in **RD cost** of our model is: 2.1% (tested only on one YUV sequence)
 
 ## To be continued...
 Since we already know 1 label comes from a 16x16 CU, so we can simply predict 1 label at a time. The input can be a combination of 64x64, 32x32 and 16x16 CUs. I'm guessing this will achieve a smaller loss and higher accuracy... Also, I'd like to try some pre-trained models like ResNet, hopefully it will produce better results...
