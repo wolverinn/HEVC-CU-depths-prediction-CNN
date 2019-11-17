@@ -80,7 +80,7 @@ def process_rdcost(ctu_x,ctu_y):
             if len(depth_cost[frame_number][ctu_number]["1"]) == 4:
                 pass
             else:
-                if (int(ctu_number) + 1) % ctu_x == 0 and (int(ctu_number) + 1) // ctu_x == ctu_y:
+                if (int(ctu_number) + 1) % ctu_x == 0 and ((int(ctu_number) + 1) // ctu_x) == ctu_y:
                     depth_cost[frame_number][ctu_number]["0"] = sum(depth_cost[frame_number][ctu_number]["1"])
                     depth_cost[frame_number][ctu_number]["1"] += [0,0,0]
                     depth_cost[frame_number][ctu_number]["2"] += list(np.zeros(12))
