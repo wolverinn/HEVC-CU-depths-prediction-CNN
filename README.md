@@ -36,17 +36,13 @@ The **loss** of our trained model on test set is: 3.1049
 
 The **accuracy** of each label predicted on test set is: 66.12%
 
-The best way to evaluate the model is to integrate the model into the HEVC encoder. I've conceived a pipeline:
+The best way to evaluate the model is to integrate the model into the HEVC encoder. I've realized a pipeline, see it in:
 
-1. When HEVC encoder starts to process a new frame with frame number FrameNumber, it calls a command: ```python use_model.py -f FrameNumber```
-2. The script ```use_model.py``` takes FrameNumber as input. It also reads the ```bitstream.cfg``` to get the YUV filename the HEVC is currently processing. If FrameNumber is 0, it first use FFmpeg to extract frames from the YUV file. Then, it processes certain frame, and for all the CTUs in this frame, it generates a ```CtuNumber.txt``` with a 16x16 matrix in it and store all the txt in a folder ```ctu```.
-3. When HEVC encoder starts to process the CTU numbered CtuNumber, it goes to the ```ctu``` folder, find ```CtuNumber.txt``` and read the depths. In ```xCompressCU()```, if it's not at the predicted depth, then skip ```xCheckRDCostIntra()``` function.
+[HEVC-deep-learning-pipeline](https://github.com/wolverinn/HEVC-deep-learning-pipeline)
 
-I've already realized ```use_model.py```. Find it in ```./model test pipeline```.
+Using this evaluating pipeline, we can compare the change in encoding time and BDBR at the same time.
 
-Using this evaluating pipeline, we can compare the encoding time and BDBR at the same time.
-
-I use a simpler approach to evaluate the increase in RD-cost for each YUV file. As ```xCompressCU()``` in HEVC encoder calculates the RD-cost exhaustively at each depth, we can get the RD-cost for every possible depth decision. Thus, we can realize comparison of RD-cost between the original encoder and the CNN model. See the ```model test pipeline``` folder for codes.
+Another way to evaluate the model is to compare the difference in RD-cost for each YUV file encoded. As ```xCompressCU()``` in HEVC encoder calculates the RD-cost exhaustively at each depth, we can get the RD-cost for every possible depth decision. Thus, we can realize comparison of RD-cost between the original encoder and the CNN model. See the ```test RD-cost``` folder for codes.
 
 The increase in **RD cost** of our model is: 2.1% (tested only on one YUV sequence)
 
