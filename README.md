@@ -42,6 +42,16 @@ The best way to evaluate the model is to integrate the model into the HEVC encod
 
 Using this evaluating pipeline, we can compare the change in encoding time and BDBR at the same time.
 
+|     YUV sequence      | bitrate-HEVC | bitrate-CNN | Y-PSNR-HEVC | Y-PSNR-CNN | YUV-PSNR-HEVC | YUV-PSNR-CNN | Time-HEVC | Time-CNN |
+| --------------------- | ------------ | ----------- | ----------- | ---------- | ------------- | ------------ | --------- | -------- |
+| Flowervase_416x240_30 | 522.3700     | 556.9627    | 34.0869     | 33.8087    | 35.2319       | 34.9543      | 1225.481  | 367.107  |
+| Keiba_416x240_30      | 539.8007     | 582.1690    | 33.4852     | 33.3019    | 34.5684       | 34.3756      | 1281.129  | 356.524  |
+| mobile_352x288_20     | 1853.5339    | 1955.5392   | 28.2047     | 27.9656    | 29.3071       | 29.0889      | 1629.696  | 666.098  |
+| RaceHorses_832x480_30 | 2594.1504    | 2719.9232   | 32.1133     | 31.9442    | 32.9179       | 32.7702      | 5440.564  | 1513.008 |
+| ParkScene_1920x1080_24 | 7361.9354    | 7702.8979   | 32.7847     | 32.5906    | 33.9392       | 33.7562      | 13238.985 | 3591.274 |
+
+The average **BD bitrate** increase is: 6.60%. The average loss in **BD-PSNR** is: 0.6dB. The average **encoding time** reduction is: 71.5%.
+
 Another way to evaluate the model is to compare the difference in RD-cost for each YUV file encoded. As ```xCompressCU()``` in HEVC encoder calculates the RD-cost exhaustively at each depth, we can get the RD-cost for every possible depth decision. Thus, we can realize comparison of RD-cost between the original encoder and the CNN model. See the ```test RD-cost``` folder for codes.
 
 The increase in **RD cost** of our model is: 2.1% (tested only on one YUV sequence)
